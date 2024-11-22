@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Hàng</title>
+    <style>
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+          }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('./static/image/vlu.png'); /* Đường dẫn đến hình nền */
+            background-size: cover; /* Làm cho hình ảnh phủ kín toàn bộ */
+            background-position: center; /* Đặt hình ảnh ở giữa */
+            background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+            height: 100vh; /* Đảm bảo body có chiều cao đầy đủ */
+      
+          }
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: rgba(153, 6, 6, 0.8); /* Nền trắng mờ */
+            padding: 10px;
+            border-radius: 5px; /* Bo góc cho thông báo */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #cb103b;
+            color: white;
+        }
+        tr {
+            background-color: #f1f1f1;
+        }
+        
+        header {
+            background-color: #cb103b;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          nav ul {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            }
+        nav li {
+            margin-left: 20px;
+            }
+        nav a {
+            color: white;
+            text-decoration: none;
+            }
+        nav a:hover {
+            text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Vanlang Shop</div>
+        <nav>
+          <ul>
+            {% if 'username' in session %}
+            <li>Chào, {{ session['username'] }}!</li>
+            <li><a href="/create">Tạo Đơn Hàng</a></li>
+            <li><a href="/quanly">Quản Lý Đơn Hàng</a></li>
+            <li><a href="/search">Tìm Kiếm Đơn Hàng</a></li>
+            <li><a href="/logout">Đăng Xuất</a></li>
+            {% else %}
+            <li><a href="/login">Đăng Nhập</a></li>
+            <li><a href="/create-account">Tạo Tài Khoản</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+      <h1>Quản Lý Đơn Hàng</h1>
+      <table>
+          <tr>
+              <th>Mã Hóa Đơn</th>
+              <th>Tên Khách Hàng</th>
+              <th>Số Điện Thoại</th>
+              <th>Sản Phẩm</th>
+              <th>Số Lượng</th>
+              <th>Thành Tiền</th>
+          </tr>
+          {% for order in orders %}
+          <tr id="order-{{ order[0] }}">
+            <td>{{ order[0] }}</td>  <!-- invoice_id -->
+            <td>{{ order[1] }}</td>  <!-- customer_name -->
+            <td>{{ order[2] }}</td>  <!-- phone_number -->
+            <td>{{ order[3] }}</td>  <!-- product_name -->
+            <td>{{ order[4] }}</td>  <!-- quantity -->
+            <td>{{ order[5] }}</td>  <!-- total -->
+            
+        </tr>
+          {% endfor %}
+      </table>
+</body>
+</html>

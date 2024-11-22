@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Đơn Hàng</title>
+    <style>
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+          }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('./static/image/vlu.png'); /* Đường dẫn đến hình nền */
+            background-size: cover; /* Làm cho hình ảnh phủ kín toàn bộ */
+            background-position: center; /* Đặt hình ảnh ở giữa */
+            background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+            height: 100vh; /* Đảm bảo body có chiều cao đầy đủ */
+      
+          }
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: rgba(153, 6, 6, 0.8); /* Nền trắng mờ */
+            padding: 10px;
+            border-radius: 5px; /* Bo góc cho thông báo */
+            }
+        
+        .form-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-container input, .form-container select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #cb103b;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5c0812;
+        }
+        header {
+            background-color: #cb103b;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            }
+        nav li {
+            margin-left: 20px;
+            }
+        nav a {
+            color: white;
+            text-decoration: none;
+            }
+        nav a:hover {
+            text-decoration: underline;
+            }
+    
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" >Vanlang Shop</div>
+        <nav>
+          <ul>
+            {% if 'username' in session %}
+            <li>Chào, {{ session['username'] }}!</li>
+            <li><a href="/create">Tạo Đơn Hàng</a></li>
+            <li><a href="/quanly">Quản Lý Đơn Hàng</a></li>
+            <li><a href="/search">Tìm Kiếm Đơn Hàng</a></li>
+            <li><a href="/logout">Đăng Xuất</a></li>
+            {% else %}
+            <li><a href="/login">Đăng Nhập</a></li>
+            <li><a href="/create-account">Tạo Tài Khoản</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+    <h1>Tạo Đơn Hàng Mới</h1>
+    <div class="form-container">
+        <form method="POST" action="/create">
+            <input type="text" name="ID" placeholder="Mã Hóa Đơn" required>
+            <input type="text" name="customerName" placeholder="Tên Khách Hàng" required>
+            <input type="number" name="phonenumber" placeholder="Số Điện Thoại" required>
+            
+            <select name="productName" id="productName" required onchange="updateTotal()">
+                <option value="" disabled selected>Chọn Sản Phẩm</option>
+                <option value="Đường" data-price="10000">Đường - 10,000 VNĐ</option>
+                <option value="Nước Mắm" data-price="20000">Nước Mắm - 20,000 VNĐ</option>
+                <option value="Nước Tương" data-price="20000">Nước Tương - 20,000 VNĐ</option>
+                <option value="Gạo ST25" data-price="300000">Gạo ST25 - 300,000 VNĐ</option>
+                <option value="Mì Tôm" data-price="3000">Mì Tôm - 3,000 VNĐ</option>
+            </select>
+        
+            <input type="number" name="quantity" id="quantity" placeholder="Số Lượng" required min="1" oninput="updateTotal()">
+            <input type="text" name="total" id="total" placeholder="Thành tiền" required readonly>
+            <button type="submit">Tạo Đơn Hàng</button>
+        </form>
+    </div>
+    <script>
+        function updateTotal() {
+            const productSelect = document.getElementById('productName');
+            const quantityInput = document.getElementById('quantity');
+            const totalInput = document.getElementById('total');
+    
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const price = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) : 0;
+            const quantity = parseInt(quantityInput.value) || 0;
+    
+            const total = price * quantity;
+            totalInput.value = total.toLocaleString(); // Hiển thị tổng tiền với định dạng số
+        }
+    </script>
+</body>
+</html>
